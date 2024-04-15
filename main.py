@@ -36,12 +36,14 @@ def get_players_guess():
 
 def evaluate_players_guess(players_guess,generated_sequence):
     feedback = {"correct_number(s)": 0, "correct_location": 0}
+    players_set = set()
     for i in range(len(generated_sequence)):
         if players_guess[i] == generated_sequence[i]:
             feedback["correct_location"] += 1
     for i in range(len(generated_sequence)):
-        if players_guess[i] in generated_sequence:
+        if players_guess[i] in generated_sequence and not players_guess[i] in players_set:
             feedback["correct_number(s)"] += 1
+            players_set.add(players_guess[i])
     return feedback
 
 
