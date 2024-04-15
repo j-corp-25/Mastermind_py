@@ -63,30 +63,22 @@ def play_game():
     feedbacks = []
     sequence = generate_random_sequence(url=URL,params=PARAMS)
     while attempts < max_attempts:
-        print(f"Attempts Status: {attempts}/{max_attempts}")
-        print(f"Remaining attempts: {max_attempts - attempts}")
-        print("This is the sequence", sequence)
+        print(sequence)
+        # print(f"Attempts Status: [{attempts}/{max_attempts}]")
+        # print("This is the sequence", sequence)
+        print(f"[       Attempts left: {max_attempts - attempts}     ]")
         guess = get_players_guess()
         feedback = evaluate_players_guess(guess,sequence)
-        print("Feedback:",feedback)
         if all(value == 0 for value in feedback.values()):
             print("All numbers are incorrect")
         elif feedback["correct_location"] == 4:
             print("Woohooo, you have won")
             break
         board.append(guess)
-        feedbacks.append(feedback.values())
-        print("Feedbacks", feedbacks)
-        print("This is your feedback Table")
-        for single_feedback in feedbacks:
-            print(single_feedback)
-
-
-
-
-        print("This is the board game Table ")
-        for single_guess in board:
-            print(single_guess)
+        feedbacks.append(list(feedback.values()))
+        print("Session Details      "+"     Board    "+"     Feedback     ")
+        for i in range(len(board)):
+            print(f"                     {board[i]}     " +   f"    {[feedbacks[i][0] ,feedbacks[i][1]]}")
         attempts += 1
     else:
         print("Sorry you have failed.Better luck next time")
@@ -97,4 +89,4 @@ def play_game():
 
 
 if __name__== "__main__":
-    test_game()
+    play_game()
