@@ -46,6 +46,13 @@ def evaluate_players_guess(players_guess,generated_sequence):
             players_set.add(players_guess[i])
     return feedback
 
+def test_game():
+    sequence = [0,1,3,5]
+    players_guesses = [[2,2,4,6],[0,2,4,6],[2,2,1,1],[0,1,5,6]]
+    for guess in players_guesses:
+        feedback = evaluate_players_guess(guess,sequence)
+
+        print(feedback)
 
 def play_game():
     max_attempts = 10
@@ -88,4 +95,4 @@ def play_game():
 
 
 if __name__== "__main__":
-    play_game()
+    test_game()
