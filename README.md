@@ -114,3 +114,25 @@ After the player has input their guess this is how I plan it to look.
 ```
 
 ##### Above is how I want the UI to be eventually, I'm hoping leveraging libraries like `rich` can help me achieve this without too much configuration
+### Breaking down the logic of the game into smaller steps:
+
+
+
+### Breaking down the logic of the game into smaller steps:
+
+
+#### 1. Game setup
+
+
+  - **Game State** I need to initialize the game state with certain variables being tracked. These include the number of attempts remaining, the actual board state, and the feedback board. This will end up being my main function that runs the game, but I can set up individual functions inside.
+    - For the board state, I can set up an empty list and as the player guesses, I can append that guess to the list, thereby "building" up the board like a stack. In the future, I could implement a possible redo or undo feature so players can replay.
+  - **Generate the Secret code** For this action, I can set up constant variables at the top of the file with the parameters as well. Generating the code is a straightforward process. I can set up a function that uses requests to fetch the numbers and convert them into a list. I need to keep the parameters modular because I'm thinking of using the max parameter to increase the difficulty in the future. I can use `num=7` as a base difficulty, then `num=8` as a medium difficulty, and finally `num=9` as hard.
+  - **Generating Feedback** This is one of the actions that will require more complex logic. I need to create an algorithm that can determine how many numbers are correct and in the right location, and how many numbers are correct but in the wrong location.
+    - For exact matches, I can compare the indices of both the `players_guess` and the `generated_sequence`. I can use regular variables as counters or I can use a dictionary with specific keys. I also need to account for when all the numbers are wrong. This would mean that at the same index where `players_guess[i]` is compared to `generated_sequence[i]`, the values are not equal, and at the same time, no `players_guess[i]` is in the `generated_sequence` array.
+
+### Bugs
+
+- After careful testing and tracking the return of the players feedback I found a bug in the logic that increases the counter for the correct number incorrectly. The correct location is working as expected but in a scenario where the user inputs the same number repeatedly, the `correct_number` is not working as expected.
+- Below is an image showing this
+![BugInDictionary](/assets/bug.PNG)
+- If you look at the feedback carefully, the `correct_number` value is not accurate. Base on the users input and given the sequence=`[4,6,1,6]` it should be `{'correct_number(s)': 2, 'correct_location': 2} `
