@@ -33,3 +33,15 @@ def get_players_guess():
             break
         except Exception as error:
             print(f"An Unexpected Error has Occured {error}")
+
+def evaluate_players_guess(players_guess,generated_sequence):
+    feedback = {"correct_number(s)": 0, "correct_location": 0}
+    for i in range(len(generated_sequence)):
+        if players_guess[i] == generated_sequence[i]:
+            feedback["correct_location"] += 1
+    for i in range(len(generated_sequence)):
+        if players_guess[i] in generated_sequence:
+            feedback["correct_number(s)"] += 1
+    return feedback
+
+
