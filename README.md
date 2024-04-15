@@ -67,7 +67,7 @@ After these initial requirements, anything else can be up to the limits of my im
 
 ## Thought process and Game Plan
 
-For this challenge I was going to initially use `JavaScript`, but after planning an initial blueprint of the logic of the game I decided to instead use `Python`. My primary language for doing leetcode and solving DS&A problems is python. It is a very flexible language and easier to understand so I figured I should use python instead since heavy logic could be implemented with this particular game. I havent implemented any games before using python but I didnt want that to stop me from trying it out this challenge. I found the prompt very exitement and Ideas started flying through my head.
+For this challenge I was going to initially use `JavaScript`, but after planning an initial blueprint of the logic of the game I decided to instead use `Python`. My primary language for doing leetcode and solving DS&A problems is python. It is a very flexible language and easier to understand so I figured I should use python instead since heavy logic could be implemented with this particular game. I havent implemented any games before using python but I didnt want that to stop me from trying it out this challenge. I found the prompt very exiting and Ideas started flying through my head.
 
 For my initial plan, I needed to figure out if im going to classes or a pure functional approach. Using classes would be a more scalable solution bringing in the ability for more features to be added easily and easier control of the state. However, Im going to set up the game with functional components and once I have that down I will possibly expand to classes. My goal is to have the base requirements first and then expand. Whether that is on the UI side or not I want the core logic of the game to function properly.
 
@@ -113,4 +113,15 @@ After the player has input their guess this is how I plan it to look.
   [...]                       [...]                              [...]
 ```
 
-##### Above is how I want the UI to be eventually, I'm hoping leveraging libraries like `rich` can help me achieve this without too much configuration
+
+_**Above is how I want the UI to be eventually, I'm hoping leveraging libraries like `rich` can help me achieve this without too much configuration**_
+
+### Breaking down the logic of the game into smaller steps:
+
+#### 1. Game setup
+
+  - **Game State** I need to initialize the game state with certain variables being tracked. These include the number of attempts remaining, the actual board state, and the feedback board. This will end up being my main function that runs the game, but I can set up individual functions inside.
+    - For the board state, I can set up an empty list and as the player guesses, I can append that guess to the list, thereby "building" up the board like a stack. In the future, I could implement a possible redo or undo feature so players can replay.
+  - **Generate the Secret code** For this action, I can set up constant variables at the top of the file with the parameters as well. Generating the code is a straightforward process. I can set up a function that uses requests to fetch the numbers and convert them into a list. I need to keep the parameters modular because I'm thinking of using the max parameter to increase the difficulty in the future. I can use `num=7` as a base difficulty, then `num=8` as a medium difficulty, and finally `num=9` as hard.
+  - **Generating Feedback** This is one of the actions that will require more complex logic. I need to create an algorithm that can determine how many numbers are correct and in the right location, and how many numbers are correct but in the wrong location.
+    - For exact matches, I can compare the indices of both the `players_guess` and the `generated_sequence`. I can use regular variables as counters or I can use a dictionary with specific keys. I also need to account for when all the numbers are wrong. This would mean that at the same index where `players_guess[i]` is compared to `generated_sequence[i]`, the values are not equal, and at the same time, no `players_guess[i]` is in the `generated_sequence` array.
