@@ -46,4 +46,23 @@ pipenv shell
 __***These are the instructions as of `4/14/2024`. I will keep updating these instructions and my thought process throughout this awesome challenge.__
 
 
+## Mastermind Game Overview
+
+Mastermind Game is a player against the `computer`. The player's goal is to guess a combination of 4 numbers. After each turn where the player guesses, the computer will provide the following feedback:
+- The number(s) are guessed correctly but are in the wrong place.
+- The number(s) are guessed correctly and are in the right place.
+- Notifies the player if all numbers were incorrect.
+
+The player will need to use these hints to eventually ‘crack the code` that the computer initializes with. The player has 10 attempts.
+
+
+## Barebone Requirements:
+The player needs to interact with the game:
+- The player can provide input.
+- The player can see the history of guesses/attempts and feedback from previous attempts.
+- The player can see the number of attempts remaining.
+
+After these initial requirements, anything else can be up to the limits of my imagination.
+
+
 ## Thought process and Game Plan
