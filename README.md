@@ -66,3 +66,51 @@ After these initial requirements, anything else can be up to the limits of my im
 
 
 ## Thought process and Game Plan
+
+For this challenge I was going to initially use `JavaScript`, but after planning an initial blueprint of the logic of the game I decided to instead use `Python`. My primary language for doing leetcode and solving DS&A problems is python. It is a very flexible language and easier to understand so I figured I should use python instead since heavy logic could be implemented with this particular game. I havent implemented any games before using python but I didnt want that to stop me from trying it out this challenge. I found the prompt very exitement and Ideas started flying through my head.
+
+For my initial plan, I needed to figure out if im going to classes or a pure functional approach. Using classes would be a more scalable solution bringing in the ability for more features to be added easily and easier control of the state. However, Im going to set up the game with functional components and once I have that down I will possibly expand to classes. My goal is to have the base requirements first and then expand. Whether that is on the UI side or not I want the core logic of the game to function properly.
+
+I made an initial skeleton of what I want to show in the command line. This is just the start, I want to leverage other libraries like `rich` and `tabulate` to enhance the UI when I get to that point.
+
+Here is my initial mock up of a design
+
+```
+
+ ▄▄       ▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄       ▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄        ▄  ▄▄▄▄▄▄▄▄▄▄
+▐░░▌     ▐░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░▌     ▐░░▌▐░░░░░░░░░░░▌▐░░▌      ▐░▌▐░░░░░░░░░░▌
+▐░▌░▌   ▐░▐░▌▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀▀▀  ▀▀▀▀█░█▀▀▀▀ ▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀▀▀▀█░▌▐░▌░▌   ▐░▐░▌ ▀▀▀▀█░█▀▀▀▀ ▐░▌░▌     ▐░▌▐░█▀▀▀▀▀▀▀█░▌
+▐░▌▐░▌ ▐░▌▐░▌▐░▌       ▐░▌▐░▌               ▐░▌     ▐░▌          ▐░▌       ▐░▌▐░▌▐░▌ ▐░▌▐░▌     ▐░▌     ▐░▌▐░▌    ▐░▌▐░▌       ▐░▌
+▐░▌ ▐░▐░▌ ▐░▌▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄▄▄      ▐░▌     ▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄█░▌▐░▌ ▐░▐░▌ ▐░▌     ▐░▌     ▐░▌ ▐░▌   ▐░▌▐░▌       ▐░▌
+▐░▌  ▐░▌  ▐░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░▌  ▐░▌  ▐░▌     ▐░▌     ▐░▌  ▐░▌  ▐░▌▐░▌       ▐░▌
+▐░▌   ▀   ▐░▌▐░█▀▀▀▀▀▀▀█░▌ ▀▀▀▀▀▀▀▀▀█░▌     ▐░▌     ▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀█░█▀▀ ▐░▌   ▀   ▐░▌     ▐░▌     ▐░▌   ▐░▌ ▐░▌▐░▌       ▐░▌
+▐░▌       ▐░▌▐░▌       ▐░▌          ▐░▌     ▐░▌     ▐░▌          ▐░▌     ▐░▌  ▐░▌       ▐░▌     ▐░▌     ▐░▌    ▐░▌▐░▌▐░▌       ▐░▌
+▐░▌       ▐░▌▐░▌       ▐░▌ ▄▄▄▄▄▄▄▄▄█░▌     ▐░▌     ▐░█▄▄▄▄▄▄▄▄▄ ▐░▌      ▐░▌ ▐░▌       ▐░▌ ▄▄▄▄█░█▄▄▄▄ ▐░▌     ▐░▐░▌▐░█▄▄▄▄▄▄▄█░▌
+▐░▌       ▐░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌     ▐░▌     ▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░▌      ▐░░▌▐░░░░░░░░░░▌
+ ▀         ▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀       ▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀        ▀▀  ▀▀▀▀▀▀▀▀▀▀
+
+# Hey! Welcome player to Mastermind.The best codebreaker game out there.
+
+Instructions:
+Guess the 4 number combination in as little attempts as possible.
+- I will provide feedback if any of the numbers are correct and if they are in the correct place.
+- I will also let you know if all your numbers are incorrect as well. Good Luck and Break on!
+- Only enter numbers please!
+
+
+Please input your guess:
+
+
+```
+After the player has input their guess this is how I plan it to look.
+
+```
+
+  Game Session Details         Game Board(Table)                        FeedBack Board(Table)
+  [Attempts Left].....        [ 1  2   3   4  ]                  [Correct Number(s) | Correct Location ]
+  [      8      ]             [ 2  4   6   7  ]                  [       1                   2         ]
+        ...                          ...                                           ...
+  [...]                       [...]                              [...]
+```
+
+##### Above is how I want the UI to be eventually, I'm hoping leveraging libraries like `rich` can help me achieve this without too much configuration
