@@ -35,14 +35,14 @@ def get_players_guess():
             print(f"An Unexpected Error has Occured {error}")
 
 def evaluate_players_guess(players_guess,generated_sequence):
-    feedback = {"correct_number(s)": 0, "correct_location": 0}
+    feedback = {"correct_numbers": 0, "correct_location": 0}
     players_set = set()
     for i in range(len(generated_sequence)):
         if players_guess[i] == generated_sequence[i]:
             feedback["correct_location"] += 1
     for i in range(len(generated_sequence)):
         if players_guess[i] in generated_sequence and not players_guess[i] in players_set:
-            feedback["correct_number(s)"] += 1
+            feedback["correct_numbers"] += 1
             players_set.add(players_guess[i])
     return feedback
 
@@ -51,8 +51,10 @@ def test_game():
     players_guesses = [[2,2,4,6],[0,2,4,6],[2,2,1,1],[0,1,5,6]]
     for guess in players_guesses:
         feedback = evaluate_players_guess(guess,sequence)
-
-        print(feedback)
+        if all(value == 0 for value in feedback.values()):
+            print("all incorrect")
+        else:
+            print(f"{feedback["correct_numbers"]} correct number" + " and " + f"{feedback["correct_location"]} correct location" )
 
 def play_game():
     max_attempts = 10
