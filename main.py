@@ -45,3 +45,45 @@ def evaluate_players_guess(players_guess,generated_sequence):
     return feedback
 
 
+def play_game():
+    max_attempts = 10
+    attempts = 0
+    board = []
+    feedbacks = []
+    sequence = generate_random_sequence(url=URL,params=PARAMS)
+    while attempts < max_attempts:
+        print(f"Attempts Status: {attempts}/{max_attempts}")
+        print(f"Remaining attempts: {max_attempts - attempts}")
+        print("This is the sequence", sequence)
+        guess = get_players_guess()
+        feedback = evaluate_players_guess(guess,sequence)
+        print("Feedback:",feedback)
+        if all(value == 0 for value in feedback.values()):
+            print("All numbers are incorrect")
+        elif feedback["correct_location"] == 4:
+            print("Woohooo, you have won")
+            break
+        board.append(guess)
+        feedbacks.append(feedback.values())
+        print("Feedbacks", feedbacks)
+        print("This is your feedback Table")
+        for single_feedback in feedbacks:
+            print(single_feedback)
+
+
+
+
+        print("This is the board game Table ")
+        for single_guess in board:
+            print(single_guess)
+        attempts += 1
+    else:
+        print("Sorry you have failed.Better luck next time")
+
+
+
+
+
+
+if __name__== "__main__":
+    play_game()
