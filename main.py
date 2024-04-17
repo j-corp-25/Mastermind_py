@@ -8,6 +8,7 @@ from rich.align import Align
 from rich.table import Table
 from rich.layout import Layout
 from rich import box
+from rich.text import Text
 import time
 import sys
 console = Console()
@@ -59,10 +60,11 @@ def get_players_guess():
                 continue
             try:
                 guess_integers_list = [int(num) for num in players_guess_input.strip()]
-                if len(guess_integers_list) == 4 and all(
-                    0 <= num <= 7 for num in guess_integers_list
-                ):
+                if len(guess_integers_list) == 4 and all(0 <= num <= 7 for num in guess_integers_list):
                     return guess_integers_list
+                else:
+                    print("Only Numbers between 0 and 7, Try again!")
+                    continue
             except ValueError:
                 print(
                     "Numbers only please: no extra spaces, or letters or special characters"
@@ -130,18 +132,18 @@ def introduce_game():
         rprint("Sorry to see you go :loudly_crying_face:")
         return False
 
-def display_game(attempts,board,feedbacks):
+def display_game(attempts,board=[],feedbacks=[]):
     game_layout = Layout()
 
-    game_charts = Table(title="Game Session",border_style="red",title_style="bold magenta", header_style="blue",show_header=True, box=box.ROUNDED,expand=True, padding=(0,0))
+    game_charts = Table(title="Game Session",border_style="red",title_style="bold magenta", header_style="blue",show_header=True, box=box.ROUNDED,expand=True)
 
 
-    game_charts.add_column("Attempts",justify="center",ratio=1)
+    # game_charts.add_column("Attempts",justify="center",ratio=1)
     game_charts.add_column("Board",justify="center",ratio=1)
     game_charts.add_column("Feedback Board",justify="center",ratio=1)
 
     for i in range(len(board)):
-        game_charts.add_row(str(attempts),str(board[i]),str(feedbacks[i]))
+        game_charts.add_row(str(board[i]),str(feedbacks[i]))
 
     game_layout.split_column(
         Layout(
@@ -165,10 +167,21 @@ def display_game(attempts,board,feedbacks):
         Layout(name="Game Board",ratio=5)
     )
 
+    attempts_text = Text(str(attempts), justify='center',style="dark_red")
+    difficulty_text = Text("Hard",justify="center",style="orange_red1")
+    hints_text = Text("3/3",justify="center",style="green3")
     game_layout["Game Board"].split_row(
-        Layout(name="Attempts"),
-        Layout(game_charts, name="Game Session")
+        Layout(name="left",ratio=2),
+        # Layout(Panel.fit(attempts_text,style="yellow",title="Attempts Left",width=25,highlight=True,height=5),name="left",ratio=2),
+        Layout(game_charts, name="right",ratio=6)
     )
+    game_layout["left"].split_column(
+        Layout(Panel(attempts_text,style="yellow",title="Attempts Left"),name="left",ratio=3),
+        Layout(Panel(hints_text,style="bright_black",title="Hints Left"),name="center",ratio=3),
+        Layout(Panel(difficulty_text,style="deep_pink2",title="Difficulty Level"),name="lower",ratio=3)
+    )
+
+
 
 
 
@@ -186,19 +199,16 @@ def play_game():
     attempts = 0
     board = []
     feedbacks = []
-    while attempts < max_attempts:
+    while attempts <= max_attempts:
         print(sequence)
-        # print(f"Attempts Status: [{attempts}/{max_attempts}]")
-        # print("This is the sequence", sequence)
-        # print(f"[       Attempts left: {max_attempts - attempts}     ]")
+        attempts_left = max_attempts - attempts
+        display_game(attempts=attempts_left,board=board,feedbacks=feedbacks)
         guess = get_players_guess()
         attempts += 1
         feedback = evaluate_players_guess(guess,sequence)
         # display_game()
         board.append(guess)
         feedbacks.append(list(feedback.values()))
-        attempts_left = max_attempts - attempts
-        display_game(attempts=attempts_left,board=board,feedbacks=feedbacks)
         if all(value == 0 for value in feedback.values()):
             print("All numbers are incorrect")
         elif feedback["correct_location"] == 4:
@@ -207,7 +217,7 @@ def play_game():
         # print("Session Details      "+"     Board    "+"     Feedback     ")
         # for i in range(len(board)):
         #     print(f"                     {board[i]}     " +   f"  Correct Numbers: {feedbacks[i][0]}, Correct Location: {feedbacks[i][1]}")
-        print(f"Attempts left {attempts_left}")
+        # print(f"Attempts left {attempts_left}")
     else:
         print("Sorry you have failed.Better luck next time")
 
