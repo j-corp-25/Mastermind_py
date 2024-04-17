@@ -3,10 +3,15 @@ from ascii_logo import logo
 from rich import print as rprint
 from rich.console import Console
 from rich.prompt import Prompt
+from rich.panel import Panel
+from rich.align import Align
+from rich.table import Table
+from rich.layout import Layout
+from rich import box
 import time
 import sys
-from rich.align import Align
 console = Console()
+layout = Layout()
 
 URL = "https://www.random.org/integers/?"
 PARAMS = {
@@ -20,14 +25,15 @@ PARAMS = {
 }
 
 styles = [
-    "white on blue",
+    "white on dark_red",
     "bold yellow on black",
     "bright_white on dark_red",
     "green on black",
     "black on white",
 ]
+centered_logo = Align.center(logo[3], vertical="middle", style=styles[0])
+
 def rich_print_logo():
-    centered_logo = Align.center(logo, vertical="middle", style=styles[2])
     rprint(centered_logo)
 
 def generate_random_sequence(url, params):
@@ -121,8 +127,53 @@ def introduce_game():
         print(f"{name} is playing")
         return name
     else:
-        rprint("[b]Sorry to see you go :loudly_crying_face:")
+        rprint("Sorry to see you go :loudly_crying_face:")
         return False
+
+def display_game(attempts,board,feedbacks):
+    game_layout = Layout()
+
+    game_charts = Table(title="Game Session",border_style="red",title_style="bold magenta", header_style="blue",show_header=True, box=box.ROUNDED,expand=True, padding=(0,0))
+
+
+    game_charts.add_column("Attempts",justify="center",ratio=1)
+    game_charts.add_column("Board",justify="center",ratio=1)
+    game_charts.add_column("Feedback Board",justify="center",ratio=1)
+
+    for i in range(len(board)):
+        game_charts.add_row(str(attempts),str(board[i]),str(feedbacks[i]))
+
+    game_layout.split_column(
+        Layout(
+            Panel(
+                renderable=centered_logo,
+                title="Welcome to Mastermind",
+                box=box.ROUNDED,
+                border_style="red",
+                title_align="center",
+                expand=True,
+                padding=(2,2),
+
+
+            ),
+            name="upper",
+            ratio=3,
+            minimum_size=15,
+
+
+        ),
+        Layout(name="Game Board",ratio=5)
+    )
+
+    game_layout["Game Board"].split_row(
+        Layout(name="Attempts"),
+        Layout(game_charts, name="Game Session")
+    )
+
+
+
+
+    rprint(game_layout)
 
 
 def play_game():
@@ -139,23 +190,28 @@ def play_game():
         print(sequence)
         # print(f"Attempts Status: [{attempts}/{max_attempts}]")
         # print("This is the sequence", sequence)
-        print(f"[       Attempts left: {max_attempts - attempts}     ]")
+        # print(f"[       Attempts left: {max_attempts - attempts}     ]")
         guess = get_players_guess()
+        attempts += 1
         feedback = evaluate_players_guess(guess,sequence)
+        # display_game()
+        board.append(guess)
+        feedbacks.append(list(feedback.values()))
+        attempts_left = max_attempts - attempts
+        display_game(attempts=attempts_left,board=board,feedbacks=feedbacks)
         if all(value == 0 for value in feedback.values()):
             print("All numbers are incorrect")
         elif feedback["correct_location"] == 4:
             print("Woohooo, you have won")
             break
-        board.append(guess)
-        feedbacks.append(list(feedback.values()))
-        print("Session Details      "+"     Board    "+"     Feedback     ")
-        for i in range(len(board)):
-            print(f"                     {board[i]}     " +   f"    {[feedbacks[i][0] ,feedbacks[i][1]]}")
-        attempts += 1
+        # print("Session Details      "+"     Board    "+"     Feedback     ")
+        # for i in range(len(board)):
+        #     print(f"                     {board[i]}     " +   f"  Correct Numbers: {feedbacks[i][0]}, Correct Location: {feedbacks[i][1]}")
+        print(f"Attempts left {attempts_left}")
     else:
         print("Sorry you have failed.Better luck next time")
 
 
 if __name__== "__main__":
+    # display_game()
     play_game()
