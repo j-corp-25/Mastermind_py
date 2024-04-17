@@ -116,6 +116,7 @@ def introduce_game():
         "1. Your task is to guess a 4 number combination\n",
         "2. You will get Feedback whether your numbers are correct and/or the location is correct\n",
         "3. You have a total of 10 Attempts\n",
+        "4. The secret sequence can have duplicate numbers\n"
         "4. Good luck and have fun\n",
     ]
 
@@ -139,8 +140,8 @@ def display_game(attempts,board=[],feedbacks=[]):
 
 
     # game_charts.add_column("Attempts",justify="center",ratio=1)
-    game_charts.add_column("Board",justify="center",ratio=1)
-    game_charts.add_column("Feedback Board",justify="center",ratio=1)
+    game_charts.add_column("Combination Board",justify="center",ratio=1)
+    game_charts.add_column("Feedback",justify="center",ratio=1,)
 
     for i in range(len(board)):
         game_charts.add_row(str(board[i]),str(feedbacks[i]))
@@ -168,11 +169,13 @@ def display_game(attempts,board=[],feedbacks=[]):
     )
 
     attempts_text = Text(str(attempts), justify='center',style="dark_red")
+
+    # Still need to add function
     difficulty_text = Text("Hard",justify="center",style="orange_red1")
     hints_text = Text("3/3",justify="center",style="green3")
+
     game_layout["Game Board"].split_row(
         Layout(name="left",ratio=2),
-        # Layout(Panel.fit(attempts_text,style="yellow",title="Attempts Left",width=25,highlight=True,height=5),name="left",ratio=2),
         Layout(game_charts, name="right",ratio=6)
     )
     game_layout["left"].split_column(
@@ -199,19 +202,21 @@ def play_game():
     attempts = 0
     board = []
     feedbacks = []
-    while attempts <= max_attempts:
+    while attempts < max_attempts:
         print(sequence)
         attempts_left = max_attempts - attempts
         display_game(attempts=attempts_left,board=board,feedbacks=feedbacks)
         guess = get_players_guess()
-        attempts += 1
-        feedback = evaluate_players_guess(guess,sequence)
-        # display_game()
         board.append(guess)
-        feedbacks.append(list(feedback.values()))
+        feedback = evaluate_players_guess(guess,sequence)
+        attempts += 1
+        # display_game()
         if all(value == 0 for value in feedback.values()):
-            print("All numbers are incorrect")
-        elif feedback["correct_location"] == 4:
+            feedbacks.append(["All numbers and locations are incorrect"])
+        else:
+            feedbacks.append(list(feedback.values()))
+
+        if feedback["correct_location"] == 4:
             print("Woohooo, you have won")
             break
         # print("Session Details      "+"     Board    "+"     Feedback     ")
