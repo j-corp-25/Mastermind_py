@@ -45,12 +45,24 @@ def generate_random_sequence(url, params):
     return integer_list
 
 
-def get_players_guess(difficulty_level):
+def get_players_guess(difficulty_level,current_hint,max_hints,previous_hints,give_hint,sequence):
     while True:
         try:
             players_guess_input = input(
                 f"Please guess a combination of four numbers from 0 - {difficulty_level} (no spaces): "
             )
+
+            if players_guess_input.lower() == 'hint':
+                if max_hints > 0:
+                    hint = give_hint(sequence,previous_hints)
+                    if hint is not None:
+                        previous_hints.append(hint)
+                        current_hint = f"There is a {str(hint)} in the sequence somewhere"
+                        print(current_hint)
+                        max_hints -= 1
+                else:
+                    print("No hints left")
+                continue
             if len(players_guess_input) == 0:
                 print("Input cannot be empty, You must crack the code!")
                 continue
@@ -65,7 +77,7 @@ def get_players_guess(difficulty_level):
                 if len(guess_integers_list) == 4 and all(
                     0 <= num <= difficulty_level for num in guess_integers_list
                 ):
-                    return guess_integers_list
+                    return guess_integers_list, current_hint, max_hints
                 else:
                     print(f"Only Numbers between 0 and {difficulty_level}, Try again!")
                     continue
@@ -121,7 +133,8 @@ def introduce_game():
         "3. You have a total of 10 Attempts\n",
         "4. The secret sequence can have duplicate numbers\n"
         "5. The higher the difficulty the higher number range you need to guess *(Easy is from 0 to 7 for a single number)\n"
-        "5. Good luck and have fun\n",
+        "6. You can use keyword 'HINT' or 'hint', to print out a hint. But you only get 3 hints.\n"
+        "7. Good luck and have fun\n",
     ]
 
     for message in intro_messages:
@@ -139,29 +152,7 @@ def introduce_game():
 
 def display_game(hint_info,players_name, difficulty, attempts, board, feedbacks):
     game_layout = Layout()
-
-
-
-    hint, hints_remaining = hint_info
-    hint_chart = Table(
-        title="Hint Table",
-        border_style="red",
-        title_style="bold magenta",
-        header_style="blue",
-        show_header=True,
-        box=box.ROUNDED,
-        expand=True,
-
-
-
-    )
-    hint_chart.add_column("Hint",justify="center",ratio=1)
-    hint_chart.add_column("Hints Left",justify="center",ratio=1)
-
-
-    hint_chart.add_row(hint,str(hints_remaining))
-
-
+    hint,remaining_hints = hint_info
 
     def convertDifficulty():
         if difficulty == 7:
@@ -212,6 +203,7 @@ def display_game(hint_info,players_name, difficulty, attempts, board, feedbacks)
     difficulty_text = Text(level, justify="center", style="orange_red1")
     name_text = Text(players_name, justify="center", style="deep_pink4")
     hints_text = Text(hint, justify="center", style="green3")
+    subtitle_text = Text(f"Hints left: {str(remaining_hints)} ",justify="center",style="blue_violet")
 
     game_layout["Game Board"].split_row(
         Layout(name="left", ratio=2), Layout(game_charts, name="right", ratio=6)
@@ -224,10 +216,10 @@ def display_game(hint_info,players_name, difficulty, attempts, board, feedbacks)
             minimum_size=1
         ),
         Layout(
-            Panel(hint_chart, style="bright_black"),
+            Panel(hints_text, style="bright_black",title="Hints",subtitle=subtitle_text,),
             name="center",
-            ratio=4,
-            minimum_size=8
+            ratio=3,
+            minimum_size=1,
 
 
         ),
@@ -311,28 +303,17 @@ def play_game():
     current_hint = ""
     while attempts < max_attempts:
         attempts_left = max_attempts - attempts
-
-        if attempts_left < (max_attempts // 2):
-            if prompt_for_hint(players_name) and max_hints > 0:
-                hint = give_hint(sequence,previous_hints)
-                if hint is not None:
-                    previous_hints.append(hint)
-                    current_hint = str(hint)
-                    max_hints -= 1
-            else:
-                print("Sorry no more hints left")
         display_game(hint_info=[current_hint, max_hints],
                      players_name=players_name,
                      difficulty=max_diff_level,
                      attempts=attempts_left,
                      board=board,
                      feedbacks=feedbacks)
-
-        guess = get_players_guess(max_diff_level)
+        guess, current_hint, max_hints = get_players_guess(max_diff_level, current_hint, max_hints, previous_hints, give_hint,sequence)
         board.append(guess)
         feedback = evaluate_players_guess(guess,sequence)
         if all(value == 0 for value in feedback.values()):
-            feedback_string = "All numbers and locations are incorrect"
+            feedback_string = "All Incorrect"
         else:
             feedback_string = f"Correct number(s): {feedback["correct_numbers"]}\tCorrect location: {feedback['correct_location']}"
         feedbacks.append(feedback_string)
