@@ -244,8 +244,20 @@ def select_difficulty(players_name):
         return 9
 
 
-def get_hint(sequence):
-    return
+def give_hint(sequence=[2,3,4,5],previous_hints=[2,3]):
+
+    for digit in sequence:
+        if digit not in previous_hints:
+            return digit
+    return None
+
+def prompt_for_hint(players_name):
+    confirm_hint = Prompt.ask(
+        f"{players_name} you're running out of attempts. Would you like a hint?",choices=["y","n"],default="y"
+    )
+    if confirm_hint == 'y':
+        return True
+    return False
 
 
 def start_timer():
@@ -287,4 +299,5 @@ def play_game():
 
 if __name__== "__main__":
     # display_game()
-    play_game()
+    # play_game()
+    get_hint()
