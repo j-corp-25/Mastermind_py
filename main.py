@@ -137,8 +137,31 @@ def introduce_game():
         return False
 
 
-def display_game(players_name, difficulty, attempts, board, feedbacks):
+def display_game(hint_info,players_name, difficulty, attempts, board, feedbacks):
     game_layout = Layout()
+
+
+
+    hint, hints_remaining = hint_info
+    hint_chart = Table(
+        title="Hint Table",
+        border_style="red",
+        title_style="bold magenta",
+        header_style="blue",
+        show_header=True,
+        box=box.ROUNDED,
+        expand=True,
+
+
+
+    )
+    hint_chart.add_column("Hint",justify="center",ratio=1)
+    hint_chart.add_column("Hints Left",justify="center",ratio=1)
+
+
+    hint_chart.add_row(hint,str(hints_remaining))
+
+
 
     def convertDifficulty():
         if difficulty == 7:
@@ -159,7 +182,7 @@ def display_game(players_name, difficulty, attempts, board, feedbacks):
         box=box.ROUNDED,
         expand=True,
     )
-    game_charts.add_column("Combination Board", justify="center", ratio=1)
+    game_charts.add_column("Combination Board", justify="center", ratio=1,width=10)
     game_charts.add_column("Feedback", justify="center", ratio=1, no_wrap=True)
 
     for i in range(len(board)):
@@ -188,37 +211,42 @@ def display_game(players_name, difficulty, attempts, board, feedbacks):
     # Still need to add function
     difficulty_text = Text(level, justify="center", style="orange_red1")
     name_text = Text(players_name, justify="center", style="deep_pink4")
-    hints_text = Text("3/3", justify="center", style="green3")
+    hints_text = Text(hint, justify="center", style="green3")
 
     game_layout["Game Board"].split_row(
         Layout(name="left", ratio=2), Layout(game_charts, name="right", ratio=6)
     )
     game_layout["left"].split_column(
         Layout(
-            Panel(attempts_text, style="yellow", title="Attempts Left", height=4),
+            Panel(attempts_text, style="yellow", title="Attempts Left"),
             name="left",
             ratio=3,
+            minimum_size=1
         ),
         Layout(
-            Panel(hints_text, style="bright_black", title="Hints Left", height=4),
+            Panel(hint_chart, style="bright_black"),
             name="center",
-            ratio=3,
+            ratio=4,
+            minimum_size=8
+
+
         ),
         Layout(
-            Panel(name_text, style="royal_blue1", title="Player", height=4),
+            Panel(name_text, style="royal_blue1", title="Player"),
             name="center",
             ratio=3,
+            minimum_size=1
         ),
         Layout(
             Panel(
                 difficulty_text,
                 style="deep_pink2",
                 title="Difficulty Level",
-                height=4,
                 subtitle=level_range,
             ),
             name="lower",
             ratio=3,
+            minimum_size=1
         ),
     )
     rprint(game_layout)
@@ -244,7 +272,7 @@ def select_difficulty(players_name):
         return 9
 
 
-def give_hint(sequence=[2,3,4,5],previous_hints=[2,3]):
+def give_hint(sequence,previous_hints):
 
     for digit in sequence:
         if digit not in previous_hints:
@@ -278,9 +306,28 @@ def play_game():
     attempts = 0
     board = []
     feedbacks = []
+    previous_hints= []
+    max_hints = 3
+    current_hint = ""
     while attempts < max_attempts:
         attempts_left = max_attempts - attempts
-        display_game(players_name,max_diff_level,attempts_left,board,feedbacks)
+
+        if attempts_left < (max_attempts // 2):
+            if prompt_for_hint(players_name) and max_hints > 0:
+                hint = give_hint(sequence,previous_hints)
+                if hint is not None:
+                    previous_hints.append(hint)
+                    current_hint = str(hint)
+                    max_hints -= 1
+            else:
+                print("Sorry no more hints left")
+        display_game(hint_info=[current_hint, max_hints],
+                     players_name=players_name,
+                     difficulty=max_diff_level,
+                     attempts=attempts_left,
+                     board=board,
+                     feedbacks=feedbacks)
+
         guess = get_players_guess(max_diff_level)
         board.append(guess)
         feedback = evaluate_players_guess(guess,sequence)
@@ -299,5 +346,5 @@ def play_game():
 
 if __name__== "__main__":
     # display_game()
-    # play_game()
-    get_hint()
+    play_game()
+    # get_hint()
