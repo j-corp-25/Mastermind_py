@@ -178,6 +178,7 @@ After the player has input their guess this is how I plan it to look.
 - Spent the weekend deciding on a programming language, which delayed concrete planning but helped in developing a detailed blueprint for the game structure.
 - Set a goal to finalize core features and ensure the logic was correct from the start of the week regardless of UI.
 - Planned to outline the game's features, functions, and user interface. Also considered whether to use the `rich` library to avoid potential restructuring of the code later.
+
 ### Tuesday
 
 - Dedicated the day to researching the rich library to understand how it could be used to implement the game’s visual mock-ups.
@@ -196,7 +197,13 @@ After the player has input their guess this is how I plan it to look.
 - Because a feature that requires more creativity means more trial and error to get it "right" vs a timer that is sole purpose is to tick down or up while playing.
 
 ### Thursday
-TBD
+
+- My goal for today is to get hints working, its a harder feature to implement than I thought because theres multiple ways to it.
+- Aside from working on the hints I also want to start refactoring my code to be more readable since theres only one day left.
+- If I get hints working, I'll see if I can work on setting up some kind of score.
+- If get hints, and score working without using too much time. I'll comeback to research how to make a timer run while the person is playing.
+- Regarding the score feature. The initial plan is to integrate a function that calculates the score based on the number of hints used and the attempts left before winning. Achieving maximum points should be possible only if no hints are used and the number of attempts is minimized.
+- This way you can only achieve the maximum amount of points if you dont use hints and have as little attempts as possible.
 
 
 ### Friday
