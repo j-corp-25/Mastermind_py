@@ -43,7 +43,7 @@ pipenv shell
   ```
 
 ***
-__***These are the instructions as of `4/14/2024`. I will keep updating these instructions and my thought process throughout this awesome challenge.__
+__***These are the instructions as of `4/17/2024`. I will keep updating these instructions and my thought process throughout this awesome challenge.__
 
 
 ## Mastermind Game Overview
@@ -130,9 +130,74 @@ After the player has input their guess this is how I plan it to look.
   - **Generating Feedback** This is one of the actions that will require more complex logic. I need to create an algorithm that can determine how many numbers are correct and in the right location, and how many numbers are correct but in the wrong location.
     - For exact matches, I can compare the indices of both the `players_guess` and the `generated_sequence`. I can use regular variables as counters or I can use a dictionary with specific keys. I also need to account for when all the numbers are wrong. This would mean that at the same index where `players_guess[i]` is compared to `generated_sequence[i]`, the values are not equal, and at the same time, no `players_guess[i]` is in the `generated_sequence` array.
 
-### Bugs
+### Bugs and setbacks
 
 - After careful testing and tracking the return of the players feedback I found a bug in the logic that increases the counter for the correct number incorrectly. The correct location is working as expected but in a scenario where the user inputs the same number repeatedly, the `correct_number` is not working as expected.
 - Below is an image showing this
 ![BugInDictionary](/assets/bug.PNG)
-- If you look at the feedback carefully, the `correct_number` value is not accurate. Base on the users input and given the sequence=`[4,6,1,6]` it should be `{'correct_number(s)': 2, 'correct_location': 2} `
+- If you look at the feedback carefully, the `correct_number` value is not accurate. Base on the users input and given the sequence=`[4,6,1,6]` it should be `{'correct_number(s)': 1, 'correct_location': 2} `
+- After two or so hours I figured out the trick. I was dealing with a problem where I would exclude duplicates. This was just like the LeetCode problem that checks if there are duplicates. But I just needed to add a little twist.
+- I initially had the below structure:
+  ```py
+  def evaluate_players_guess(players_guess,generated_sequence):
+      feedback = {"correct_number(s)": 0, "correct_location": 0}
+      for i in range(len(generated_sequence)):
+          if players_guess[i] == generated_sequence[i]:
+              feedback["correct_location"] += 1
+      for i in range(len(generated_sequence)):
+          if players_guess[i] in generated_sequence:
+              feedback["correct_number(s)"] += 1
+      return feedback
+  ```
+- The function would fail every time the player would input the same number for the entire combination.
+- **However, after using a `set` I cracked it!** and got this. Logic has been conquered!
+  ```py
+  def evaluate_players_guess(players_guess, generated_sequence):
+    feedback = {"correct_numbers": 0, "correct_location": 0}
+    players_set = set()
+    for i in range(len(generated_sequence)):
+        if players_guess[i] == generated_sequence[i]:
+            feedback["correct_location"] += 1
+    for i in range(len(generated_sequence)):
+        if (
+            players_guess[i] in generated_sequence
+            and not players_guess[i] in players_set
+        ):
+            feedback["correct_numbers"] += 1
+            players_set.add(players_guess[i])
+    return feedback
+  ```
+- On Tuesday I ran into a setback where I couldn't understand what "renderable" objects were in rich documentation. I would pass down the function and try to display the output on the terminal but I would get an attribute error `AttributeError: 'int' object has no attribute 'translate'`. I ended finding out after a lot fo trial and error that it needed to be string or another `rich` created object.
+- My first intention was to just turn everything into a string as it came into the `display_game` function and everything will be fine, but the `feedback` was in a dictionary so I needed to figure out how to display it properly.
+- What I ended up doing was implementing a check to determine the type of feedback contained in the dictionary. If every value in the feedback dictionary was 0, indicating that all numbers and their locations were incorrect, I set the feedback string to "All numbers and locations are incorrect." If the feedback contained any correct numbers or locations, I formatted the feedback string to include these details, showing both the count of correct numbers and their correct locations, thereby making it clear and informative to the player.
+
+## Work Timeline
+
+### Monday
+
+- Spent the weekend deciding on a programming language, which delayed concrete planning but helped in developing a detailed blueprint for the game structure.
+- Set a goal to finalize core features and ensure the logic was correct from the start of the week regardless of UI.
+- Planned to outline the game's features, functions, and user interface. Also considered whether to use the `rich` library to avoid potential restructuring of the code later.
+### Tuesday
+
+- Dedicated the day to researching the rich library to understand how it could be used to implement the game’s visual mock-ups.
+- Invested over 10 hours in studying documentation, experimenting with examples, and adjusting variables to extract useful elements for the project.
+- Achieved a breakthrough at 7:33 PM, mastering the use of rich.layout, rich.table, and rich.console. It was an incredible moment!
+- I actually had a moment of Eureka at 7:33 pm. After spending so much time trying to understanding `rich.layout` , `rich.table` and understanding how the `rich.console` operates. I finally knew how to manipulate these methods.
+
+### Wednesday
+
+- Spent some time polishing functions and running the black formatter to keep the code clean.
+- My goal was to add a game timer and some hints. The timer turned out to be a real headache because threading in Python was way trickier than I expected, eating into the time I had planned to work on the hints.
+- I kicked off with the timer and, looking back, I wish I hadn't. I got sucked into a threading rabbit hole for about four to five hours and still couldn't get it to work the way I needed.
+- I figured out that the timer had to run alongside/parallel the game's main function, but cracking that code just wasn't happening.
+- Because of all the time I spent struggling with the timer, I only managed to set up a basic placeholder for the hints and not completely functional.
+- The reason I wanted to leave the the hints feature for later was because from the start I didn't want to focus on features that required more creativity.
+- Because a feature that requires more creativity means more trial and error to get it "right" vs a timer that is sole purpose is to tick down or up while playing.
+
+### Thursday
+TBD
+
+
+### Friday
+TBD
