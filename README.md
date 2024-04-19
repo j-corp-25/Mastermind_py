@@ -203,8 +203,23 @@ After the player has input their guess this is how I plan it to look.
 - If I get hints working, I'll see if I can work on setting up some kind of score.
 - If get hints, and score working without using too much time. I'll comeback to research how to make a timer run while the person is playing.
 - Regarding the score feature. The initial plan is to integrate a function that calculates the score based on the number of hints used and the attempts left before winning. Achieving maximum points should be possible only if no hints are used and the number of attempts is minimized.
-- This way you can only achieve the maximum amount of points if you dont use hints and have as little attempts as possible.
+- This way you can only achieve the maximum amount of points if you don't use hints and have as little attempts as possible.
 
+**EOD update:**
 
+I ran out of time to research and implement a score system, I spent a lot of time implementing the hint function and making the logic work accurately. Now, Im mainly focusing on the endgame. My main goal now is to make sure everything is polished, do any small optimizations; have a simple winner screen and losing screen, run tests to check everything is working, make sure the instructions are correct to get the game started.
+
+If I have any time left I will try to implement a Leader board. Based on rich [documentation](https://rich.readthedocs.io/en/stable/progress.html#reading-from-a-file) it shouldn`t be too difficult. There are  simple examples using certain keywords to ``read`` or ``write``.
+Example:
+
+For this context `rb` means it will read in binary mode. `r` for reading and `b` for binary mode.
+```py
+import json
+import rich.progress
+
+with rich.progress.open("data.json", "rb") as file:
+    data = json.load(file)
+print(data)
+```
 ### Friday
 TBD
