@@ -60,6 +60,13 @@ Mastermind Game is a player against the `computer`. The player's goal is to gues
 
 The player will need to use these hints to eventually ‘crack the code` that the computer initializes with. The player has 10 attempts.
 
+## Game features:
+1. The player can ask for 2 hints and see them throughout the game session
+2. The player can modify the difficulty of the sequence
+3. The player can see their feedback for correct number and location
+4. The player can see how many attempts they have left throughout the game session
+5. The player has the option to display their name if they choose to.
+6. The player can see their previous combination guesses to help them figure out the code
 
 ## Barebone Requirements:
 The player needs to interact with the game:
@@ -129,6 +136,11 @@ After the player has input their guess this is how I plan it to look.
   - **Generate the Secret code** For this action, I can set up constant variables at the top of the file with the parameters as well. Generating the code is a straightforward process. I can set up a function that uses requests to fetch the numbers and convert them into a list. I need to keep the parameters modular because I'm thinking of using the max parameter to increase the difficulty in the future. I can use `num=7` as a base difficulty, then `num=8` as a medium difficulty, and finally `num=9` as hard.
   - **Generating Feedback** This is one of the actions that will require more complex logic. I need to create an algorithm that can determine how many numbers are correct and in the right location, and how many numbers are correct but in the wrong location.
     - For exact matches, I can compare the indices of both the `players_guess` and the `generated_sequence`. I can use regular variables as counters or I can use a dictionary with specific keys. I also need to account for when all the numbers are wrong. This would mean that at the same index where `players_guess[i]` is compared to `generated_sequence[i]`, the values are not equal, and at the same time, no `players_guess[i]` is in the `generated_sequence` array.
+#### 2. Features
+
+The planning for which feature to implement and what to prioritize is the tricky part. I need to figure out what are the core requirements and can I get them done? Then I can move on to add my own features or the suggested ones.
+
+My plan is to prioritize features that are more straightforward to interpretation. This means I can prioritize a timer, or add difficulty configuration first before something like a hint feature or multiplayer or score. Because In my head I would need to plan out what does multiplayer even mean? Or what is considered a hint ? This way I have more time to be creative and not be in a situation where Im running out of time.
 
 ### Bugs and setbacks
 
@@ -200,7 +212,6 @@ After the player has input their guess this is how I plan it to look.
 
 - My goal for today is to get hints working, its a harder feature to implement than I thought because theres multiple ways to it.
 - Aside from working on the hints I also want to start refactoring my code to be more readable since theres only one day left.
-- If I get hints working, I'll see if I can work on setting up some kind of score.
 - If get hints, and score working without using too much time. I'll comeback to research how to make a timer run while the person is playing.
 - Regarding the score feature. The initial plan is to integrate a function that calculates the score based on the number of hints used and the attempts left before winning. Achieving maximum points should be possible only if no hints are used and the number of attempts is minimized.
 - This way you can only achieve the maximum amount of points if you don't use hints and have as little attempts as possible.
@@ -222,4 +233,13 @@ with rich.progress.open("data.json", "rb") as file:
 print(data)
 ```
 ### Friday
-TBD
+
+My main goal for today is to do as much cleaning as possible and test as much edge cases as I can. I removed the test function into its own file so it doesn't over populate the main file that runs the game. I also built a [data flow](/Data_Flow_Visual.drawio.svg) diagram showing what is executing first and where its getting passed on.
+
+
+---
+Resources
+
+[Rich Documentation](https://rich.readthedocs.io/en/stable/index.html)
+[Requests Documentation](https://requests.readthedocs.io/en/latest/)
+[Text to Ascii Generator](https://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20)
