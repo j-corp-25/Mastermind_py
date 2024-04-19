@@ -36,11 +36,12 @@ pipenv shell
 ```
 
 ### 4. Running the project
+
 - To run the script
 
-  ```bash
-  python main.py
-  ```
+```bash
+python main.py
+```
 
 ***
 __***These are the instructions as of `4/17/2024`. I will keep updating these instructions and my thought process throughout this awesome challenge.__
@@ -114,17 +115,12 @@ After the player has input their guess this is how I plan it to look.
 ```
 
 ##### Above is how I want the UI to be eventually, I'm hoping leveraging libraries like `rich` can help me achieve this without too much configuration
-### Breaking down the logic of the game into smaller steps:
-
-
 
 ### Breaking down the logic of the game into smaller steps:
-
 
 #### 1. Game setup
 
-
-  - **Game State** I need to initialize the game state with certain variables being tracked. These include the number of attempts remaining, the actual board state, and the feedback board. This will end up being my main function that runs the game, but I can set up individual functions inside.
+  - **Game State** I need to initialize the game state with certain variables being tracked. This includes the number of attempts remaining, the actual board state, and the feedback board. This will end up being my main function that runs the game, but I can set up individual functions inside.
     - For the board state, I can set up an empty list and as the player guesses, I can append that guess to the list, thereby "building" up the board like a stack. In the future, I could implement a possible redo or undo feature so players can replay.
   - **Generate the Secret code** For this action, I can set up constant variables at the top of the file with the parameters as well. Generating the code is a straightforward process. I can set up a function that uses requests to fetch the numbers and convert them into a list. I need to keep the parameters modular because I'm thinking of using the max parameter to increase the difficulty in the future. I can use `num=7` as a base difficulty, then `num=8` as a medium difficulty, and finally `num=9` as hard.
   - **Generating Feedback** This is one of the actions that will require more complex logic. I need to create an algorithm that can determine how many numbers are correct and in the right location, and how many numbers are correct but in the wrong location.
