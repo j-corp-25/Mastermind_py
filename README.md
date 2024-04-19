@@ -237,6 +237,34 @@ print(data)
 My main goal for today is to do as much cleaning as possible and test as much edge cases as I can. I removed the test function into its own file so it doesn't over populate the main file that runs the game. I also built a [data flow](/Data_Flow_Visual.drawio.svg) diagram showing what is executing first and where its getting passed on.
 
 
+
+## Gameplay Screenshots
+
+1. Game introduction:
+
+![Introduction](/assets/gp1.PNG)
+
+***Player is introduced to the game and prompted to: Start, Name and difficulty***
+
+
+2. Board display:
+
+![Game Display](/assets/gp2.PNG)
+![Game Display](/assets/gp3.PNG)
+![Game Display](/assets/gp4.PNG)
+![Game Display](/assets/gp5.PNG)
+
+
+***Terminal then displays the board, and player is prompted to put a 4 number combination. Player can also ask for `hint` in here***
+
+3. Endgame:
+
+![Game Display](/assets/gp6.PNG)
+![Game Display](/assets/gp7.PNG)
+
+***The player will be shown at the end if they won or not***
+
+
 ---
 Resources
 
