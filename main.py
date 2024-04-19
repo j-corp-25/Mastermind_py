@@ -96,17 +96,6 @@ def evaluate_players_guess(players_guess, generated_sequence):
             players_set.add(players_guess[i])
     return feedback
 
-
-def test_example_run():
-    sequence = [0,1,3,5]
-    players_guesses = [[2,2,4,6],[0,2,4,6],[2,2,1,1],[0,1,5,6]]
-    for guess in players_guesses:
-        feedback = evaluate_players_guess(guess,sequence)
-        if all(value == 0 for value in feedback.values()):
-            print("all incorrect")
-        else:
-            print(f"{feedback["correct_numbers"]}correct number"+"and" + f"{feedback["correct_location"]}correct location" )
-
 def introduce_game():
     def slow_output(string, speed=0.01):
         for char in string:
@@ -251,14 +240,6 @@ def give_hint(sequence,previous_hints):
         if digit not in previous_hints:
             return digit
     return None
-
-def prompt_for_hint(players_name):
-    confirm_hint = Prompt.ask(
-        f"{players_name} you're running out of attempts. Would you like a hint?",choices=["y","n"],default="y"
-    )
-    if confirm_hint == 'y':
-        return True
-    return False
 
 def play_game():
     rprint(centered_intro_logo)
