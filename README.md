@@ -48,7 +48,7 @@ python main.py
 ```
 
 ***
-__***These are the instructions as of `4/17/2024`. I will keep updating these instructions and my thought process throughout this awesome challenge.__
+__***These are the instructions as of `4/19/2024`. I will keep updating these instructions and my thought process throughout this awesome challenge.__
 
 
 ## Mastermind Game Overview
