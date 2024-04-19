@@ -21,6 +21,7 @@ cd Mastermind_py
 ```bash
 pip install pipenv
 ```
+**If the command does not work run `pip3 install pipenv`**
 - After installing `pipenv` then you can run:
 
 ```bash
