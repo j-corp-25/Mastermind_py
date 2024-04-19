@@ -46,7 +46,7 @@ def get_players_guess(difficulty_level,current_hint,max_hints,previous_hints,giv
                     hint = give_hint(sequence,previous_hints)
                     if hint is not None:
                         previous_hints.append(hint)
-                        current_hint = f"There is a {str(hint)} in the sequence somewhere"
+                        current_hint = f"There is a {str(hint)} in the sequence"
                         print(current_hint)
                         max_hints -= 1
                 else:
@@ -120,7 +120,7 @@ def introduce_game():
     start_game = Prompt.ask("Would you like to start?", choices=["y", "n"], default="y")
 
     if start_game == "y":
-        name = input("Awesome, What is your name? ")
+        name = Prompt.ask("Awesome, What is your name? ", default="Player")
         return name
     else:
         rprint("Sorry to see you go :loudly_crying_face:")
@@ -196,8 +196,7 @@ def display_game(hint_info,players_name, difficulty, attempts, board, feedbacks)
 
         ),
         Layout(
-            Panel(name_text, style="royal_blue1", title="Player"),
-            name="center",
+            Panel(name_text, style="royal_blue1", title="Player's Name"),            name="center",
             ratio=3,
             minimum_size=1
         ),
