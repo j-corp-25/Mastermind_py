@@ -240,10 +240,18 @@ def give_hint(sequence,previous_hints):
             return digit
     return None
 
+def multiplayer_prompt():
+    ask_for_multiplayer = Prompt.ask("Is this multiplayer", choices=["y","n"], default="y")
+    if ask_for_multiplayer == "y":
+        return True
+    else:
+        return False
+
 def play_game():
     rprint(centered_intro_logo)
     new_params = PARAMS.copy()
     players_name = introduce_game()
+    is_multiplayer = multiplayer_prompt()
     if players_name is False:
         return
     max_diff_level = select_difficulty(players_name)
@@ -256,6 +264,7 @@ def play_game():
     previous_hints= []
     max_hints = 2
     current_hint = ""
+    print(sequence)
     while attempts < max_attempts:
         attempts_left = max_attempts - attempts
         display_game(hint_info=[current_hint, max_hints],
@@ -273,6 +282,13 @@ def play_game():
             feedback_string = f"Correct number(s): {feedback["correct_numbers"]}\tCorrect location: {feedback['correct_location']}"
         feedbacks.append(feedback_string)
         if feedback["correct_location"] == 4:
+            if is_multiplayer == True:
+                if attempts == 0:
+                    print("Player one, you have won")
+                elif attempts % 2 != 0:
+                    print("Player 2 you have won")
+                else:
+                    print("Player 1, you have won")
             rprint(centered_win_logo)
             break
         attempts += 1
