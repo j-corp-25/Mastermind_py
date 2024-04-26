@@ -284,7 +284,7 @@ def play_game():
         if feedback["correct_location"] == 4:
             if is_multiplayer == True:
                 if attempts == 0:
-                    print("Player one, you have won")
+                    print("Player 1, you have won")
                 elif attempts % 2 != 0:
                     print("Player 2 you have won")
                 else:
